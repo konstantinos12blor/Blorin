@@ -3,47 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blory Game</title>
+    <title>Blory</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="menu" class="menu">
-        <div class="hamburger" id="hamburger">&#9776;</div>
-        <div id="menuOptions" class="menu-options">
-            <button id="settingsBtn">Settings</button>
-            <button id="gameBtn">Game</button>
-            <button id="exitBtn">Exit</button>
-        </div>
-    </div>
-
-    <div id="introPage" class="intro-page">
-        <h1>Καλώς ήρθες στο Blory!</h1>
-        <label for="username">Όνομα:</label>
-        <input type="text" id="username" placeholder="Εισάγετε το όνομά σας">
+    <div class="container">
+        <h1 class="title">Blory</h1>
         
-        <label for="profilePic">Φωτογραφία Προφίλ:</label>
-        <input type="file" id="profilePic" accept="image/*">
-
-        <button id="startBtn">Ξεκίνα</button>
-    </div>
-
-    <div id="mainPage" class="main-page" style="display: none;">
-        <h1 id="appTitle">Blory</h1>
-        <button id="postBtn">Ανάρτηση</button>
-
-        <div id="postsSection">
-            <!-- Εδώ θα εμφανίζονται οι αναρτήσεις -->
+        <div id="profile-section">
+            <img id="profile-pic" src="" alt="Profile Picture">
+            <span id="username-display"></span>
+            <button id="edit-profile">Επεξεργασία</button>
         </div>
-    </div>
 
-    <div id="postModal" class="modal">
-        <div class="modal-content">
-            <h2>Τι θέλεις να αναρτήσεις;</h2>
-            <textarea id="postText" placeholder="Γράψε κάτι..."></textarea>
-            <input type="file" id="mediaInput" accept="image/*, video/*">
-            <button id="submitPost">Ανάρτηση</button>
-            <button id="closeModal">Κλείσιμο</button>
-        </div>
+        <button id="postButton">Ανάρτηση</button>
+
+        <div id="postsSection"></div>
     </div>
 
     <script src="app.js"></script>

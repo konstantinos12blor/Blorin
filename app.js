@@ -1,97 +1,34 @@
-// Αρχικές μεταβλητές
-let startBtn = document.getElementById("startBtn");
-let introPage = document.getElementById("introPage");
-let mainPage = document.getElementById("mainPage");
-let usernameInput = document.getElementById("username");
-let profilePicInput = document.getElementById("profilePic");
-let postBtn = document.getElementById("postBtn");
-let postsSection = document.getElementById("postsSection");
-let postModal = document.getElementById("postModal");
-let submitPostBtn = document.getElementById("submitPost");
-let closeModalBtn = document.getElementById("closeModal");
-let postText = document.getElementById("postText");
-let mediaInput = document.getElementById("mediaInput");
+document.getElementById("postButton").addEventListener("click", function() {
+    let content = prompt("Τι θέλεις να γράψεις;");
+    if (!content) return;
 
-// Menu variables
-let hamburger = document.getElementById("hamburger");
-let menuOptions = document.getElementById("menuOptions");
-let exitBtn = document.getElementById("exitBtn");
-let gameBtn = document.getElementById("gameBtn");
-let settingsBtn = document.getElementById("settingsBtn");
+    let media = prompt("Δώσε URL εικόνας ή βίντεο (ή άσε κενό):");
 
-// Έλεγχος αν υπάρχουν δεδομένα στο localStorage για όνομα και εικόνα
-if (localStorage.getItem("username") && localStorage.getItem("profilePic")) {
-    introPage.style.display = "none";
-    mainPage.style.display = "block";
+    let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+    posts.unshift({
+        username: localStorage.getItem("username"),
+        profilePic: localStorage.getItem("profilePic"),
+        content,
+        media
+    });
+
+    localStorage.setItem("posts", JSON.stringify(posts));
     displayPosts();
-} else {
-    introPage.style.display = "block";
-    mainPage.style.display = "none";
-}
-
-// Ξεκίνημα της εφαρμογής
-startBtn.addEventListener("click", () => {
-    let username = usernameInput.value;
-    let profilePic = profilePicInput.files[0];
-
-    if (username && profilePic) {
-        localStorage.setItem("username", username);
-        localStorage.setItem("profilePic", URL.createObjectURL(profilePic));
-        introPage.style.display = "none";
-        mainPage.style.display = "block";
-        displayPosts();
-    } else {
-        alert("Παρακαλώ εισάγετε όνομα και φωτογραφία προφίλ!");
-    }
 });
 
-// Άνοιγμα modal για ανάρτηση
-postBtn.addEventListener("click", () => {
-    postModal.style.display = "flex";
-});
-
-// Κλείσιμο του modal
-closeModalBtn.addEventListener("click", () => {
-    postModal.style.display = "none";
-});
-
-// Αποθήκευση ανάρτησης
-submitPostBtn.addEventListener("click", () => {
-    let postContent = postText.value;
-    let media = mediaInput.files[0];
-
-    if (postContent || media) {
-        let posts = JSON.parse(localStorage.getItem("posts") || "[]");
-        posts.push({
-            username: localStorage.getItem("username"),
-            profilePic: localStorage.getItem("profilePic"),
-            content: postContent,
-            media: media ? URL.createObjectURL(media) : null
-        });
-
-        localStorage.setItem("posts", JSON.stringify(posts));
-        displayPosts();
-        postText.value = '';
-        mediaInput.value = '';
-        postModal.style.display = "none";
-    } else {
-        alert("Παρακαλώ εισάγετε κείμενο ή επιλέξτε αρχείο!");
-    }
-});
-
-// Εμφάνιση των αναρτήσεων
+// Εμφάνιση αναρτήσεων
 function displayPosts() {
+    let postsSection = document.getElementById("postsSection");
     postsSection.innerHTML = '';
     let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-    posts.forEach(post => {
+    posts.forEach((post, index) => {
         let postDiv = document.createElement("div");
         postDiv.classList.add("post");
 
         let profileImg = document.createElement("img");
         profileImg.src = post.profilePic;
         profileImg.alt = "Profile Picture";
-        profileImg.width = 50;
 
         let postContent = document.createElement("div");
         postContent.classList.add("post-content");
@@ -105,24 +42,72 @@ function displayPosts() {
             postContent.appendChild(mediaElement);
         }
 
+        // Like Section
+        let likeSection = document.createElement("div");
+        likeSection.classList.add("like-section");
+
+        let likeButton = document.createElement("button");
+        likeButton.classList.add("like-button");
+        likeButton.innerHTML = "❤ Like";
+
+        let likeCount = document.createElement("span");
+        likeCount.classList.add("like-count");
+
+        let userId = localStorage.getItem("username") || "guest";
+        let likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "{}");
+        let likes = likedPosts[index] || 0;
+
+        likeCount.textContent = `${likes} Likes`;
+
+        if (likedPosts[index + "-" + userId]) {
+            likeButton.classList.add("liked");
+            likeButton.disabled = true;
+        }
+
+        likeButton.addEventListener("click", () => {
+            if (!likedPosts[index + "-" + userId]) {
+                likes++;
+                likedPosts[index] = likes;
+                likedPosts[index + "-" + userId] = true;
+                localStorage.setItem("likedPosts", JSON.stringify(likedPosts));
+                likeCount.textContent = `${likes} Likes`;
+                likeButton.classList.add("liked");
+                likeButton.disabled = true;
+            }
+        });
+
+        likeSection.appendChild(likeButton);
+        likeSection.appendChild(likeCount);
+
         postDiv.appendChild(profileImg);
         postDiv.appendChild(postContent);
+        postDiv.appendChild(likeSection);
+
         postsSection.appendChild(postDiv);
     });
 }
 
-// Hamburger menu functionality
-hamburger.addEventListener("click", () => {
-    menuOptions.style.display = (menuOptions.style.display === "block") ? "none" : "block";
+// Επεξεργασία προφίλ
+document.getElementById("edit-profile").addEventListener("click", function() {
+    let username = prompt("Εισάγετε νέο όνομα:");
+    if (!username) return;
+    let profilePic = prompt("Εισάγετε νέο URL εικόνας προφίλ:");
+    if (!profilePic) return;
+
+    localStorage.setItem("username", username);
+    localStorage.setItem("profilePic", profilePic);
+    loadProfile();
 });
 
-// Exit button
-exitBtn.addEventListener("click", () => {
-    window.close(); // Κλείνει την εφαρμογή (ή το παράθυρο του browser)
-});
+// Φόρτωση προφίλ
+function loadProfile() {
+    let username = localStorage.getItem("username") || "Χρήστης";
+    let profilePic = localStorage.getItem("profilePic") || "default.jpg";
+    document.getElementById("username-display").textContent = username;
+    document.getElementById("profile-pic").src = profilePic;
+}
 
-// Game button (FullScreen)
-gameBtn.addEventListener("click", () => {
-    // Μπορείς να προσθέσεις τον κώδικα του παιχνιδιού για fullscreen εδώ
-    document.documentElement.requestFullscreen();
+document.addEventListener("DOMContentLoaded", () => {
+    loadProfile();
+    displayPosts();
 });
