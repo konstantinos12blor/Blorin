@@ -1,0 +1,116 @@
+/* Γενικά στυλ */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+/* Εισαγωγή χρήστη */
+.intro-page {
+    padding: 20px;
+}
+
+#username, #profilePic {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Κουμπί για την αρχική σελίδα */
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Hamburger Menu */
+.menu {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+}
+
+.hamburger {
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+}
+
+.menu-options {
+    display: none;
+    background-color: #fff;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 150px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.menu-options button {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.menu-options button:hover {
+    background-color: #45a049;
+}
+
+/* Κύρια σελίδα */
+.main-page {
+    padding: 20px;
+}
+
+#appTitle {
+    font-size: 3rem;
+    color: #32CD32; /* Πράσινο χρώμα */
+    text-shadow: 0 0 15px rgba(0, 255, 0, 0.5); /* Γυαλιστερό εφέ */
+}
+
+/* Modal (φόρμα ανάρτησης) */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+textarea, input[type="file"] {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
